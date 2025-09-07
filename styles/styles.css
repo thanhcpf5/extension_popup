@@ -1,0 +1,56 @@
+/* Overlay background */
+.tutorial-overlay-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 9998;
+}
+
+/* Highlighted element */
+.tutorial-highlight {
+  box-shadow: 0 0 0 4px #ff9800, 0 0 10px 4px #ff9800;
+  position: relative;
+  z-index: 9999;
+  pointer-events: auto !important;
+}
+
+/* Tooltip popup */
+.tutorial-tooltip {
+  position: absolute;
+  background: #fff;
+  color: #333;
+  padding: 18px 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  z-index: 10000;
+  min-width: 240px;
+  transition: box-shadow 0.3s, border-radius 0.3s, padding 0.3s;
+  font-size: 1.08em;
+  animation: tooltipFadeIn 0.4s;
+}
+
+@keyframes tooltipFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tutorial-buttons {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.tutorial-btn {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+  background: #ff9800;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.tutorial-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

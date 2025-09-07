@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tutorial Extension</title>
+    <link rel="stylesheet" href="../styles/popup.css" />
+  </head>
+  <body>
+    <div class="popup-container">
+      <h2>Tutorial Overlay</h2>
+      <div class="popup-section">
+        <label class="switch">
+          <input type="checkbox" id="toggle-tutorial" />
+          <span class="slider"></span>
+        </label>
+        <span>Enable Tutorial</span>
+      </div>
+      <div class="popup-section">
+        <button id="restart-btn">Restart Tutorial</button>
+      </div>
+      <div class="popup-section">
+        <button id="info-btn">Extension Info</button>
+      </div>
+      <div id="info-modal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h3>About</h3>
+          <p>
+            This extension provides a step-by-step tutorial overlay for
+            supported pages. You can enable/disable the tutorial, restart it, or
+            view info here.
+          </p>
+        </div>
+      </div>
+    </div>
+    <script src="../scripts/popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Hướng Dẫn Dịch Vụ Công",
+  "version": "1.0",
+  "description": "Provides a step-by-step tutorial.",
+  "permissions": ["scripting", "storage"],
+  "host_permissions": [
+    "https://dichvucong.bocongan.gov.vn/*"
+  ],
+  "web_accessible_resources": [
+    {
+        "resources": ["steps.json"],
+        "matches": ["https://dichvucong.bocongan.gov.vn/*"]
+    }
+],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://dichvucong.bocongan.gov.vn/*"
+      ],
+      "js": ["scripts/validate.js", "scripts/content.js"],
+      "css": ["styles/styles.css"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html"
+  }
+}

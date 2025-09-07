@@ -1,0 +1,59 @@
+{
+    "https://dichvucong.bocongan.gov.vn/bo-cong-an/tiep-nhan-online/chon-truong-hop-ho-so": [
+    { 
+      "selector": "#_fcmaLoaiXe", 
+      "text": "Bước 1: Hãy lựa chọn loại xe của bạn.", 
+      "validate": "#_fcmaLoaiXe" 
+    },
+    { 
+      "selector": "#_fcdiaChiDangKy", 
+      "text": "Bước 2: Hãy lựa chọn điểm đăng ký theo địa chỉ thường trú hoặc tạm trú.", 
+      "validate": "#_fcdiaChiDangKy" 
+    },
+    { 
+      "selector": "#maDiemDangKy", 
+      "text": "Bước 3: Hãy click vào nút chọn điểm đăng ký, sau đó chọn điểm trong danh sách.", 
+      "validate": "#_fcmaDiemDangKy" 
+    },
+    { 
+      "selector": "#btn-next", 
+      "text": "Tiếp tục thực hiện các bước tiến theo." 
+    }
+    ],
+    "https://dichvucong.bocongan.gov.vn/bo-cong-an/tiep-nhan-online/nhap-thong-tin-nguoi-nop-ho-so": [
+    { 
+      "selector": ".custom-file:has(#custom-file-label-phuongtien)", 
+      "text": "Bước 4: Bấm vào đây và tải ảnh phương tiện của bạn lên.", 
+      "validate": "#custom-file-input-phuongtien" 
+    },
+    { 
+      "selector": ".custom-file:has(#custom-file-input-chungtu-before)", 
+      "text": "Bước 5: Bấm vào đây và tải ảnh chứng từ nguồn gốc mặt trước.", 
+      "validate": "#custom-file-input-chungtu-before" 
+    },
+    { 
+      "selector": ".custom-file:has(#custom-file-input-chungtu-after)", 
+      "text": "Bước 6: Bấm vào đây và tải ảnh chứng từ nguồn gốc mặt trước.", 
+      "validate": "#custom-file-input-chungtu-after" 
+    },
+    { 
+      "selector": "#_fc_fstracuuSoKhung", 
+      "text": "Bước 7: Nhập số khung xe của bạn.", 
+      "validate": "#_fc_fstracuuSoKhung" 
+    },
+    { 
+      "selector": "#_fc_fsTraCuMaHsLPTB", 
+      "text": "Bước 8: Nhập mã hồ sơ lệ phí cước bạ.", 
+      "validate": "#_fc_fsTraCuMaHsLPTB" 
+    },
+    { 
+      "selector": "#_fs359301_col_1", 
+      "text": "Bước 9: Nhập mã bảo mật phía bên phải.", 
+      "validate": "#_fc_fsmaXacNhan" 
+    },
+    { 
+      "selector": "#_fcbtnTracuuTTXe", 
+      "text": "Bước 10: Bấm vào đây để tra cứu thông tin." 
+    }
+    ]
+  }
