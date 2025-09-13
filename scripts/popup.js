@@ -2,8 +2,13 @@
 const toggle = document.getElementById("toggle-tutorial");
 const restartBtn = document.getElementById("restart-btn");
 const infoBtn = document.getElementById("info-btn");
+const adminBtn = document.getElementById("admin-btn");
 const modal = document.getElementById("info-modal");
 const closeModal = document.querySelector(".close");
+// Open admin.html in new tab
+adminBtn.onclick = function () {
+  chrome.tabs.create({ url: chrome.runtime.getURL("popup/admin.html") });
+};
 
 // Load state
 chrome.storage.sync.get(["tutorialEnabled"], (data) => {

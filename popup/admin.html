@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Panel - Tutorial Extension</title>
+    <link rel="stylesheet" href="../styles/admin.css" />
+  </head>
+  <body>
+    <div class="admin-container">
+      <h2>Admin Panel</h2>
+      <div class="admin-section">
+        <label for="target-url">Target URL:</label>
+        <input type="text" id="target-url" placeholder="https://example.com" />
+        <button id="scan-dom-btn">Scan DOM with AI</button>
+      </div>
+      <div class="admin-section">
+        <table id="steps-table">
+          <thead>
+            <tr>
+              <th>Selector</th>
+              <th>Text</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Steps will be dynamically inserted here -->
+          </tbody>
+        </table>
+        <button id="add-step-btn">Add Step</button>
+      </div>
+      <div class="admin-section">
+        <button id="save-btn">Save</button>
+      </div>
+    </div>
+    <script type="module" src="../scripts/admin.js"></script>
+  </body>
+</html>

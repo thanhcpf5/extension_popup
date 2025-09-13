@@ -1,0 +1,49 @@
+/* admin.css - Styles for Admin Panel */
+.admin-container {
+  max-width: 600px;
+  margin: 30px auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 24px;
+  font-family: Arial, sans-serif;
+}
+.admin-section {
+  margin-bottom: 20px;
+}
+#target-url {
+  width: 70%;
+  padding: 6px;
+  margin-right: 10px;
+}
+#scan-dom-btn, #add-step-btn, #save-btn {
+  padding: 6px 16px;
+  margin: 6px 2px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#scan-dom-btn:hover, #add-step-btn:hover, #save-btn:hover {
+  background: #1565c0;
+}
+#steps-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
+#steps-table th, #steps-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+#steps-table th {
+  background: #f5f5f5;
+}
+input[type="text"] {
+  width: 90%;
+  padding: 4px;
+}
+button {
+  font-size: 14px;
+}

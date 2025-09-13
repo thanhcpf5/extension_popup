@@ -1,4 +1,3 @@
-
 (function () {
   let stepsConfig,
     steps,
@@ -21,22 +20,18 @@
   });
 
   async function initTutorial() {
-    try {
-      const res = await fetch(chrome.runtime.getURL("steps.json"));
-      stepsConfig = await res.json();
-    } catch (e) {
-      console.error("Failed to load steps.json", e);
-      return;
-    }
-    const url = window.location.href;
-    for (const key in stepsConfig) {
-      if (url.startsWith(key)) {
-        steps = stepsConfig[key];
-        break;
+    chrome.storage.local.get(["steps"], (result) => {
+      stepsConfig = result.steps || {};
+      const url = window.location.href;
+      for (const key in stepsConfig) {
+        if (url.startsWith(key)) {
+          steps = stepsConfig[key];
+          break;
+        }
       }
-    }
-    if (!steps || !Array.isArray(steps) || steps.length === 0) return;
-    if (tutorialEnabled) showStep(currentStep);
+      if (!steps || !Array.isArray(steps) || steps.length === 0) return;
+      if (tutorialEnabled) showStep(currentStep);
+    });
   }
 
   function showStep(idx) {
