@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test TTS Extension</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 3px;
+            background-color: #007cba;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005a8b;
+        }
+        input, select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        #console-output {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test TTS Extension</h1>
+    
+    <div class="test-section">
+        <h2>Kiểm tra Extension đã load chưa</h2>
+        <button onclick="testExtensionLoad()">Kiểm tra Extension</button>
+        <div id="extension-status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Text-to-Speech</h2>
+        <input type="text" id="test-text" placeholder="Nhập văn bản để test TTS" value="Xin chào, đây là test tiếng Việt">
+        <br>
+        <button onclick="testTTS()">Test TTS</button>
+        <button onclick="testVietnamese()">Test Tiếng Việt</button>
+        <button onclick="testEnglish()">Test English</button>
+        <button onclick="stopTTS()">Dừng</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Tutorial Elements</h2>
+        <input type="email" id="_fcmaLoaiXe" placeholder="Test email field">
+        <select id="_fcdiaChiDangKy">
+            <option value="">Chọn địa chỉ</option>
+            <option value="hanoi">Hà Nội</option>
+            <option value="hcm">TP.HCM</option>
+        </select>
+        <input type="text" id="maDiemDangKy" placeholder="Mã điểm đăng ký">
+        <button id="btn-next">Tiếp tục</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Console Output</h2>
+        <div id="console-output"></div>
+        <button onclick="clearConsole()">Xóa Console</button>
+    </div>
+
+    <script>
+        // Override console.log to display in page
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        const consoleDiv = document.getElementById('console-output');
+        
+        function addToConsole(type, ...args) {
+            const timestamp = new Date().toLocaleTimeString();
+            const message = `[${timestamp}] ${type.toUpperCase()}: ${args.join(' ')}\n`;
+            consoleDiv.textContent += message;
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addToConsole('log', ...args);
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addToConsole('error', ...args);
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addToConsole('warn', ...args);
+        };
+        
+        function clearConsole() {
+            consoleDiv.textContent = '';
+        }
+        
+        function testExtensionLoad() {
+            const statusDiv = document.getElementById('extension-status');
+            
+            // Check if extension scripts are loaded
+            if (typeof TextToSpeechModule !== 'undefined') {
+                statusDiv.innerHTML = '<p style="color: green;">✅ TextToSpeechModule đã được load</p>';
+                console.log('TextToSpeechModule available');
+            } else {
+                statusDiv.innerHTML = '<p style="color: red;">❌ TextToSpeechModule chưa được load</p>';
+                console.error('TextToSpeechModule not available');
+            }
+            
+            // Check if validateStep is available
+            if (typeof validateStep !== 'undefined') {
+                statusDiv.innerHTML += '<p style="color: green;">✅ validateStep function đã được load</p>';
+                console.log('validateStep function available');
+            } else {
+                statusDiv.innerHTML += '<p style="color: red;">❌ validateStep function chưa được load</p>';
+                console.error('validateStep function not available');
+            }
+        }
+        
+        let tts = null;
+        
+        async function initTTS() {
+            if (!tts && typeof TextToSpeechModule !== 'undefined') {
+                try {
+                    tts = new TextToSpeechModule({
+                        enabled: true,
+                        rate: 0.9,
+                        pitch: 1.0,
+                        volume: 0.8
+                    });
+                    await tts.init();
+                    console.log('TTS initialized successfully');
+                } catch (error) {
+                    console.error('TTS initialization failed:', error);
+                    tts = null;
+                }
+            }
+        }
+        
+        async function testTTS() {
+            await initTTS();
+            if (tts) {
+                const text = document.getElementById('test-text').value;
+                console.log('Testing TTS with text:', text);
+                try {
+                    await tts.speak(text);
+                    console.log('TTS test completed');
+                } catch (error) {
+                    console.error('TTS test failed:', error);
+                }
+            } else {
+                console.error('TTS not available');
+            }
+        }
+        
+        async function testVietnamese() {
+            await initTTS();
+            if (tts) {
+                const text = "Xin chào! Đây là test tiếng Việt với dấu thanh điệu. Tôi đang kiểm tra khả năng đọc tiếng Việt.";
+                console.log('Testing Vietnamese TTS');
+                try {
+                    await tts.speakVietnamese(text);
+                    console.log('Vietnamese TTS test completed');
+                } catch (error) {
+                    console.error('Vietnamese TTS test failed:', error);
+                }
+            } else {
+                console.error('TTS not available');
+            }
+        }
+        
+        async function testEnglish() {
+            await initTTS();
+            if (tts) {
+                const text = "Hello! This is an English test. Testing text-to-speech functionality.";
+                console.log('Testing English TTS');
+                try {
+                    await tts.speakEnglish(text);
+                    console.log('English TTS test completed');
+                } catch (error) {
+                    console.error('English TTS test failed:', error);
+                }
+            } else {
+                console.error('TTS not available');
+            }
+        }
+        
+        function stopTTS() {
+            if (tts) {
+                tts.stop();
+                console.log('TTS stopped');
+            }
+        }
+        
+        // Auto-run extension check on page load
+        window.addEventListener('load', function() {
+            setTimeout(testExtensionLoad, 1000);
+        });
+    </script>
+</body>
+</html>

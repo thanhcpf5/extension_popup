@@ -5,20 +5,35 @@
   "description": "Provides a step-by-step tutorial.",
   "permissions": ["scripting", "storage"],
   "host_permissions": [
-    "https://dichvucong.bocongan.gov.vn/*"
+    "https://dichvucong.bocongan.gov.vn/*",
+    "file:///*",
+    "http://localhost/*",
+    "http://127.0.0.1/*"
   ],
   "web_accessible_resources": [
     {
-        "resources": ["steps.json"],
-        "matches": ["https://dichvucong.bocongan.gov.vn/*"]
+      "resources": ["steps.json"],
+      "matches": [
+        "https://dichvucong.bocongan.gov.vn/*",
+        "file:///*",
+        "http://localhost/*",
+        "http://127.0.0.1/*"
+      ]
     }
-],
+  ],
   "content_scripts": [
     {
       "matches": [
-        "https://dichvucong.bocongan.gov.vn/*"
+        "https://dichvucong.bocongan.gov.vn/*",
+        "file:///*",
+        "http://localhost/*",
+        "http://127.0.0.1/*"
       ],
-      "js": ["scripts/validate.js", "scripts/content.js"],
+      "js": [
+        "scripts/text-to-speech.js",
+        "scripts/validate.js",
+        "scripts/content.js"
+      ],
       "css": ["styles/styles.css"]
     }
   ],

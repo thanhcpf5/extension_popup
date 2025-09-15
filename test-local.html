@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dịch Vụ Công - Local</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007cba;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005a8b;
+        }
+        .highlight {
+            border: 2px solid #ff0000 !important;
+            background-color: #fff0f0 !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>Đăng Ký Xe - Test Local</h1>
+    <p>Trang này mô phỏng form đăng ký để test extension</p>
+    
+    <form>
+        <div class="form-group">
+            <label for="_fcmaLoaiXe">Loại xe:</label>
+            <select id="_fcmaLoaiXe" name="_fcmaLoaiXe">
+                <option value="">-- Chọn loại xe --</option>
+                <option value="xe_may">Xe máy</option>
+                <option value="o_to">Ô tô</option>
+                <option value="xe_tai">Xe tải</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="_fcdiaChiDangKy">Địa chỉ đăng ký:</label>
+            <select id="_fcdiaChiDangKy" name="_fcdiaChiDangKy">
+                <option value="">-- Chọn địa chỉ --</option>
+                <option value="thuong_tru">Theo địa chỉ thường trú</option>
+                <option value="tam_tru">Theo địa chỉ tạm trú</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="maDiemDangKy">Mã điểm đăng ký:</label>
+            <input type="text" id="maDiemDangKy" name="maDiemDangKy" placeholder="Nhập mã điểm đăng ký">
+            <input type="hidden" id="_fcmaDiemDangKy" name="_fcmaDiemDangKy">
+        </div>
+        
+        <div class="form-group">
+            <button type="button" id="btn-next">Tiếp tục</button>
+            <button type="button" onclick="testManualTutorial()">Khởi động Tutorial</button>
+            <button type="button" onclick="testTTSOnly()">Test TTS</button>
+        </div>
+    </form>
+    
+    <div style="margin-top: 30px; padding: 15px; background: #f0f0f0; border-radius: 5px;">
+        <h3>Hướng dẫn test:</h3>
+        <ol>
+            <li>Load extension vào Chrome</li>
+            <li>Mở trang này</li>
+            <li>Click vào icon extension để mở popup</li>
+            <li>Bật tutorial và speech</li>
+            <li>Test các chức năng TTS</li>
+        </ol>
+        <p><strong>Lưu ý:</strong> Trang này chỉ để test local, extension thật sẽ chạy trên website chính thức.</p>
+    </div>
+
+    <script>
+        // URL phải khớp với pattern trong manifest
+        console.log('Current URL:', window.location.href);
+        console.log('Page loaded for local testing');
+        
+        function testManualTutorial() {
+            console.log('Attempting to start tutorial manually...');
+            // Simulate the tutorial start
+            if (window.postMessage) {
+                window.postMessage({ action: 'startTutorial' }, '*');
+            }
+        }
+        
+        function testTTSOnly() {
+            console.log('Testing TTS only...');
+            if (typeof TextToSpeechModule !== 'undefined') {
+                const tts = new TextToSpeechModule();
+                tts.speak('Đây là test TTS trực tiếp từ trang web');
+            } else {
+                console.log('TextToSpeechModule not available - extension not loaded');
+            }
+        }
+        
+        // Check if extension is loaded
+        setTimeout(() => {
+            if (typeof TextToSpeechModule !== 'undefined') {
+                console.log('✅ Extension scripts loaded successfully');
+            } else {
+                console.log('❌ Extension scripts not loaded');
+                console.log('Make sure:');
+                console.log('1. Extension is installed in Chrome');
+                console.log('2. Extension has permission for this domain');
+                console.log('3. Content scripts are configured correctly');
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
