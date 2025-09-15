@@ -29,15 +29,28 @@
     if (msg.action === "restartTutorial") {
       if (steps) {
         currentStep = 0;
+        console.log(
+          "Restarting tutorial - TTS available:",
+          !!tts,
+          "Speech enabled:",
+          speechEnabled
+        );
         showStep(currentStep);
       }
     } else if (msg.action === "toggleSpeech") {
       speechEnabled = msg.enabled;
+      console.log("Speech toggled to:", speechEnabled);
       if (tts) {
         tts.setEnabled(speechEnabled);
       }
       sendResponse({ success: true });
     } else if (msg.action === "testVoice") {
+      console.log(
+        "Testing voice - TTS available:",
+        !!tts,
+        "Speech enabled:",
+        speechEnabled
+      );
       if (tts && speechEnabled) {
         tts.speak(msg.text);
       }
@@ -45,12 +58,24 @@
     }
   });
 
-  chrome.storage.sync.get(["tutorialEnabled", "speechEnabled"], (data) => {
-    tutorialEnabled = data.tutorialEnabled !== false;
-    speechEnabled = data.speechEnabled !== false;
-    initTutorial();
-    initTTS();
-  });
+  chrome.storage.sync.get(
+    ["tutorialEnabled", "speechEnabled"],
+    async (data) => {
+      tutorialEnabled = data.tutorialEnabled !== false;
+      // Enable speech by default - only disable if explicitly set to false
+      speechEnabled =
+        data.speechEnabled === undefined ? true : data.speechEnabled;
+
+      // If this is the first time, set speechEnabled to true in storage
+      if (data.speechEnabled === undefined) {
+        chrome.storage.sync.set({ speechEnabled: true });
+      }
+
+      // Initialize TTS first, then tutorial
+      await initTTS();
+      initTutorial();
+    }
+  );
 
   async function initTutorial() {
     try {
@@ -108,9 +133,24 @@
     tooltip.style.top = `${rect.bottom + window.scrollY + 12}px`;
     tooltip.style.left = `${rect.left + window.scrollX}px`;
 
-    // Auto-speak the step if TTS is enabled
+    // Auto-speak the step if TTS is enabled (with a small delay to ensure everything is ready)
     if (tts && speechEnabled) {
-      speakStepText(step);
+      console.log(
+        "Auto-speaking enabled - TTS available:",
+        !!tts,
+        "Speech enabled:",
+        speechEnabled
+      );
+      setTimeout(() => {
+        speakStepText(step);
+      }, 300);
+    } else {
+      console.log(
+        "Auto-speaking disabled - TTS available:",
+        !!tts,
+        "Speech enabled:",
+        speechEnabled
+      );
     }
 
     btns.querySelector("#tutorial-back").onclick = () => {
@@ -174,7 +214,7 @@
               speechText += ". Đây là trường nhập văn bản.";
             }
           } else if (tagName === "button") {
-            speechText += ". Đây là một nút bấm.";
+            speechText += ". Vui lòng nhấn nút bấm.";
           } else if (tagName === "select") {
             speechText += ". Đây là menu lựa chọn.";
           }
