@@ -11,7 +11,7 @@ class TextToSpeechModule {
     this.voiceCache = new Map();
     this.isInitialized = false;
 
-    // Language detection patterns
+    // Language detection patterns (Vietnamese only for this extension)
     this.languagePatterns = {
       vi: {
         diacritics:
@@ -55,35 +55,17 @@ class TextToSpeechModule {
           "chọn",
           "giới",
           "thiệu",
-        ],
-      },
-      en: {
-        words: [
-          "the",
-          "and",
-          "or",
-          "but",
-          "in",
-          "on",
-          "at",
-          "to",
-          "for",
-          "of",
-          "with",
-          "by",
-          "this",
-          "that",
-          "enter",
-          "click",
-          "submit",
-          "form",
-          "field",
-          "required",
-          "email",
-          "name",
-          "address",
-          "phone",
-          "select",
+          "bước",
+          "hướng",
+          "dẫn",
+          "tiếp",
+          "tục",
+          "quay",
+          "lại",
+          "bỏ",
+          "qua",
+          "đọc",
+          "nghe",
         ],
       },
     };
@@ -125,82 +107,134 @@ class TextToSpeechModule {
   async cacheVoices() {
     const voices = window.speechSynthesis.getVoices();
 
-    // Cache Vietnamese voices
+    // Cache Vietnamese voices with expanded search criteria
     const vietnameseVoices = voices.filter(
+      (voice) =>
+        voice.lang.startsWith("vi") ||
+        voice.lang.includes("VN") ||
+        voice.lang.includes("vi-") ||
+        voice.name.toLowerCase().includes("vietnamese") ||
+        voice.name.toLowerCase().includes("vietnam") ||
+        voice.name.toLowerCase().includes("tiếng việt")
+    );
+
+    // If no Vietnamese voices found, try to find any voice that might work with Vietnamese
+    if (vietnameseVoices.length === 0) {
+      console.warn(
+        "No Vietnamese voices found, searching for alternative voices"
+      );
+
+      // Look for Google or Microsoft voices that might support Vietnamese
+      const alternativeVoices = voices.filter(
+        (voice) =>
+          voice.name.includes("Google") ||
+          voice.name.includes("Microsoft") ||
+          voice.name.includes("Natural") ||
+          voice.localService
+      );
+
+      if (alternativeVoices.length > 0) {
+        vietnameseVoices.push(...alternativeVoices.slice(0, 3)); // Take first 3 as backup
+      }
+    }
+
+    this.voiceCache.set("vi", vietnameseVoices);
+
+    console.log(
+      "TTS: Cached Vietnamese voices:",
+      vietnameseVoices.map((v) => `${v.name} (${v.lang})`)
+    );
+
+    if (vietnameseVoices.length === 0) {
+      console.warn("WARNING: No Vietnamese voices available on this system");
+    }
+  }
+
+  detectLanguage(text) {
+    // Always return Vietnamese for this extension
+    return "vi";
+  }
+
+  selectVoice(language) {
+    // For this extension, always try to use Vietnamese voices
+    const vietnameseVoices = this.voiceCache.get("vi");
+    if (vietnameseVoices && vietnameseVoices.length > 0) {
+      // Priority order for Vietnamese voices:
+      // 1. Google Vietnamese voices
+      // 2. Microsoft Vietnamese voices
+      // 3. Any voice with Vietnamese in the name
+      // 4. Local service voices
+      // 5. First available Vietnamese voice
+
+      const googleVoice = vietnameseVoices.find(
+        (voice) =>
+          voice.name.includes("Google") &&
+          (voice.lang.startsWith("vi") || voice.lang.includes("VN"))
+      );
+      if (googleVoice) {
+        console.log("Selected Google Vietnamese voice:", googleVoice.name);
+        return googleVoice;
+      }
+
+      const microsoftVoice = vietnameseVoices.find(
+        (voice) =>
+          voice.name.includes("Microsoft") &&
+          (voice.lang.startsWith("vi") || voice.lang.includes("VN"))
+      );
+      if (microsoftVoice) {
+        console.log(
+          "Selected Microsoft Vietnamese voice:",
+          microsoftVoice.name
+        );
+        return microsoftVoice;
+      }
+
+      const namedVietnameseVoice = vietnameseVoices.find(
+        (voice) =>
+          voice.name.toLowerCase().includes("vietnamese") ||
+          voice.name.toLowerCase().includes("vietnam")
+      );
+      if (namedVietnameseVoice) {
+        console.log(
+          "Selected named Vietnamese voice:",
+          namedVietnameseVoice.name
+        );
+        return namedVietnameseVoice;
+      }
+
+      const localVoice = vietnameseVoices.find((voice) => voice.localService);
+      if (localVoice) {
+        console.log("Selected local Vietnamese voice:", localVoice.name);
+        return localVoice;
+      }
+
+      console.log(
+        "Selected first available Vietnamese voice:",
+        vietnameseVoices[0].name
+      );
+      return vietnameseVoices[0];
+    }
+
+    // Fallback: try to find any Vietnamese voice in all available voices
+    const allVoices = window.speechSynthesis.getVoices();
+    const fallbackVietnameseVoice = allVoices.find(
       (voice) =>
         voice.lang.startsWith("vi") ||
         voice.lang.includes("VN") ||
         voice.name.toLowerCase().includes("vietnamese")
     );
-    this.voiceCache.set("vi", vietnameseVoices);
 
-    // Cache English voices
-    const englishVoices = voices.filter(
-      (voice) =>
-        voice.lang.startsWith("en") &&
-        (voice.name.includes("Google") ||
-          voice.name.includes("Microsoft") ||
-          voice.default ||
-          voice.localService)
-    );
-    this.voiceCache.set("en", englishVoices);
-
-    // Cache other languages
-    const otherLanguages = ["zh", "ja", "ko", "fr", "de", "es", "it"];
-    otherLanguages.forEach((lang) => {
-      const langVoices = voices.filter((voice) => voice.lang.startsWith(lang));
-      if (langVoices.length > 0) {
-        this.voiceCache.set(lang, langVoices);
-      }
-    });
-
-    console.log(
-      "TTS: Cached voices for languages:",
-      Array.from(this.voiceCache.keys())
-    );
-  }
-
-  detectLanguage(text) {
-    if (!text || typeof text !== "string") return "en";
-
-    const lowerText = text.toLowerCase();
-    const words = lowerText.split(/\s+/).filter((word) => word.length > 1);
-
-    // Check for Vietnamese
-    const viPattern = this.languagePatterns.vi;
-    if (viPattern.diacritics.test(text)) return "vi";
-
-    const viWordCount = viPattern.words.filter((word) =>
-      lowerText.includes(word)
-    ).length;
-    if (viWordCount >= 2 || viWordCount / words.length > 0.15) return "vi";
-
-    // Check for English
-    const enPattern = this.languagePatterns.en;
-    const enWordCount = enPattern.words.filter((word) =>
-      lowerText.includes(word)
-    ).length;
-    if (enWordCount >= 2 || enWordCount / words.length > 0.2) return "en";
-
-    // Default to English
-    return "en";
-  }
-
-  selectVoice(language) {
-    const cachedVoices = this.voiceCache.get(language);
-    if (cachedVoices && cachedVoices.length > 0) {
-      // Prefer Google/Microsoft voices, then local service, then default
-      return (
-        cachedVoices.find((voice) => voice.name.includes("Google")) ||
-        cachedVoices.find((voice) => voice.name.includes("Microsoft")) ||
-        cachedVoices.find((voice) => voice.localService) ||
-        cachedVoices[0]
+    if (fallbackVietnameseVoice) {
+      console.log(
+        "Selected fallback Vietnamese voice:",
+        fallbackVietnameseVoice.name
       );
+      return fallbackVietnameseVoice;
     }
 
-    // Fallback to any available voice for the language
-    const allVoices = window.speechSynthesis.getVoices();
-    return allVoices.find((voice) => voice.lang.startsWith(language));
+    // Last resort: use default voice but warn user
+    console.warn("No Vietnamese voice found, using default voice");
+    return allVoices.find((voice) => voice.default) || allVoices[0];
   }
 
   /**
@@ -246,8 +280,8 @@ class TextToSpeechModule {
         return false; // Don't interrupt for normal priority
       }
 
-      // Detect language if not specified
-      const detectedLanguage = language || this.detectLanguage(text);
+      // Force Vietnamese language for this extension
+      const detectedLanguage = "vi"; // Always use Vietnamese
 
       // Create utterance
       const utterance = new SpeechSynthesisUtterance(text);
@@ -256,13 +290,19 @@ class TextToSpeechModule {
       utterance.rate = Math.max(0.1, Math.min(10, rate));
       utterance.pitch = Math.max(0, Math.min(2, pitch));
       utterance.volume = Math.max(0, Math.min(1, volume));
-      utterance.lang =
-        detectedLanguage === "vi" ? "vi-VN" : `${detectedLanguage}-US`;
 
-      // Select appropriate voice
-      const selectedVoice = this.selectVoice(detectedLanguage);
+      // Always set Vietnamese language
+      utterance.lang = "vi-VN";
+
+      // Select appropriate Vietnamese voice
+      const selectedVoice = this.selectVoice("vi");
       if (selectedVoice) {
         utterance.voice = selectedVoice;
+        console.log(
+          `TTS: Using voice: ${selectedVoice.name} (${selectedVoice.lang})`
+        );
+      } else {
+        console.warn("TTS: No Vietnamese voice selected, using default");
       }
 
       // Store reference
@@ -271,7 +311,7 @@ class TextToSpeechModule {
       // Set up event handlers
       return new Promise((resolve, reject) => {
         utterance.onstart = () => {
-          console.log(`TTS: Started speaking in ${detectedLanguage}`);
+          console.log(`TTS: Started speaking Vietnamese text`);
           if (onStart) onStart();
         };
 
@@ -390,23 +430,13 @@ class TextToSpeechModule {
   }
 
   /**
-   * Convenience method for Vietnamese text
+   * Convenience method for Vietnamese text (redundant since all text is treated as Vietnamese)
    * @param {string} text
    * @param {Object} options
    * @returns {Promise<boolean>}
    */
   speakVietnamese(text, options = {}) {
-    return this.speak(text, { ...options, language: "vi" });
-  }
-
-  /**
-   * Convenience method for English text
-   * @param {string} text
-   * @param {Object} options
-   * @returns {Promise<boolean>}
-   */
-  speakEnglish(text, options = {}) {
-    return this.speak(text, { ...options, language: "en" });
+    return this.speak(text, options); // Language will be forced to Vietnamese anyway
   }
 
   /**
