@@ -2,64 +2,58 @@
   "https://dichvucong.bocongan.gov.vn/bo-cong-an/tiep-nhan-online/chon-truong-hop-ho-so": [
     {
       "selector": "#_fcmaLoaiXe",
-      "text": "Bước 1: Hãy lựa chọn loại xe của bạn.",
+      "text": "Bước 1: Hãy lựa chọn loại xe của bạn.",
       "validate": "#_fcmaLoaiXe"
     },
     {
       "selector": "#_fcdiaChiDangKy",
-      "text": "Bước 2: Hãy lựa chọn điểm đăng ký theo địa chỉ thường trú hoặc tạm trú.",
+      "text": "Bước 2: Hãy lựa chọn điểm đăng ký theo địa chỉ thường trú hoặc tạm trú.",
       "validate": "#_fcdiaChiDangKy"
     },
     {
       "selector": "#maDiemDangKy",
-      "text": "Bước 3: Hãy click vào nút chọn điểm đăng ký, sau đó chọn điểm trong danh sách.",
+      "text": "Bước 3: Hãy click vào nút chọn điểm đăng ký, sau đó chọn điểm trong danh sách.",
       "validate": "#_fcmaDiemDangKy"
     },
     {
       "selector": "#btn-next",
-      "text": "Tiếp tục thực hiện các bước tiến theo."
+      "text": "Tiếp tục thực hiện các bước tiến theo."
     }
   ],
-  "file://": [
+  "https://dichvucong.bocongan.gov.vn/bo-cong-an/tiep-nhan-online/nhap-thong-tin-nguoi-nop-ho-so": [
     {
-      "selector": "#_fcmaLoaiXe",
-      "text": "TEST LOCAL - Bước 1: Hãy lựa chọn loại xe của bạn.",
-      "validate": "#_fcmaLoaiXe"
+      "selector": ".custom-file:has(#custom-file-label-phuongtien)",
+      "text": "Bước 4: Bấm vào đây và tải ảnh phương tiện của bạn lên.",
+      "validate": "#custom-file-input-phuongtien"
     },
     {
-      "selector": "#_fcdiaChiDangKy",
-      "text": "TEST LOCAL - Bước 2: Hãy lựa chọn điểm đăng ký theo địa chỉ thường trú hoặc tạm trú.",
-      "validate": "#_fcdiaChiDangKy"
+      "selector": ".custom-file:has(#custom-file-input-chungtu-before)",
+      "text": "Bước 5: Bấm vào đây và tải ảnh chứng từ nguồn gốc mặt trước.",
+      "validate": "#custom-file-input-chungtu-before"
     },
     {
-      "selector": "#maDiemDangKy",
-      "text": "TEST LOCAL - Bước 3: Hãy nhập mã điểm đăng ký.",
-      "validate": "#maDiemDangKy"
+      "selector": ".custom-file:has(#custom-file-input-chungtu-after)",
+      "text": "Bước 6: Bấm vào đây và tải ảnh chứng từ nguồn gốc mặt trước.",
+      "validate": "#custom-file-input-chungtu-after"
     },
     {
-      "selector": "#btn-next",
-      "text": "TEST LOCAL - Hoàn thành! Bạn có thể tiếp tục."
-    }
-  ],
-  "http://localhost": [
-    {
-      "selector": "#_fcmaLoaiXe",
-      "text": "LOCALHOST TEST - Bước 1: Hãy lựa chọn loại xe của bạn.",
-      "validate": "#_fcmaLoaiXe"
+      "selector": "#_fc_fstracuuSoKhung",
+      "text": "Bước 7: Nhập số khung xe của bạn.",
+      "validate": "#_fc_fstracuuSoKhung"
     },
     {
-      "selector": "#_fcdiaChiDangKy",
-      "text": "LOCALHOST TEST - Bước 2: Hãy lựa chọn điểm đăng ký theo địa chỉ thường trú hoặc tạm trú.",
-      "validate": "#_fcdiaChiDangKy"
+      "selector": "#_fc_fsTraCuMaHsLPTB",
+      "text": "Bước 8: Nhập mã hồ sơ lệ phí cước bạ.",
+      "validate": "#_fc_fsTraCuMaHsLPTB"
     },
     {
-      "selector": "#maDiemDangKy",
-      "text": "LOCALHOST TEST - Bước 3: Hãy nhập mã điểm đăng ký.",
-      "validate": "#maDiemDangKy"
+      "selector": "#_fs359301_col_1",
+      "text": "Bước 9: Nhập mã bảo mật phía bên phải.",
+      "validate": "#_fc_fsmaXacNhan"
     },
     {
-      "selector": "#btn-next",
-      "text": "LOCALHOST TEST - Hoàn thành! Bạn có thể tiếp tục."
+      "selector": "#_fcbtnTracuuTTXe",
+      "text": "Bước 10: Bấm vào đây để tra cứu thông tin."
     }
   ]
 }
